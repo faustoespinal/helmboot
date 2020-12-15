@@ -1,0 +1,96 @@
+apiVersion: helmboot/beta/v1
+type: application  # application, microservice, job
+name: myapp
+description: "This is a deployment of my awesome application"
+version: 1.0.0
+appVersion: 2.0.1
+spec:
+  security:
+    grantTypes: 
+      - implicit
+    roles:
+      - admin:
+          scopes:
+            - scope1
+            - scope2
+      - joeuser:
+          scopes:
+            - scope1
+  deployments:
+    - deadbeef:
+        image: someimage
+        tag: 1.0.0
+        configmaps:
+          - appconfig
+          - otherconfig
+        secrets:
+          - appsecret1
+        port: 8080
+        databases:
+          - my-db-connection
+    - crazycow:
+        image: otherimage
+        tag: 2.0.1
+        secret: appsecret1
+        port: 8082
+        secrets:
+          - appsecret1
+        messaging:
+          - my-msg-queue
+        storage:
+          - mystorage1:
+              mount: "/mnt/store1"
+          - mystorage2:
+              mount: "/mnt/store2"
+  jobs:
+    - initmeplease:
+        image: somejobimage
+        tag: 1.0.1
+        command: "echo Initializing; ls -ls"
+        configmaps:
+          - appconfig
+        storage:
+          - mystorage2:
+              mount: "/mnt/storage"
+  services:
+    - svc1:
+        deployment: deadbeef
+    - svc2:
+        deployment: crazycow
+  storage:
+    - mystorage1:
+        size: 2Gi
+        mode: ReadWriteOnce
+    - mystorage2:
+        size: 1Gi
+        mode: ReadWriteMany
+        storageClass: shared
+  ingresses:
+    - svc1-ingress:
+        service: svc1
+    - svc2-ingress:
+        service: svc2
+    - svc3-ingress:
+        service: svc3
+        namespace: edison-core
+        externalService: eis-stow
+  configmaps:
+    - appconfig:
+        data:
+          - mykey: myvalue
+    - otherconfig:
+        data:
+          - key1: value1
+          - key2: value2
+  secrets:
+    - appsecret1:
+        type: "opaque"  # tls, opaque, file
+        data:
+          - SECRET_A
+          - SECRET_B
+  databases:
+    - my-db-connection
+  messaging:
+    - my-msg-queue
+
+# ApplicationRegistration, Resources, health and readiness probes...
