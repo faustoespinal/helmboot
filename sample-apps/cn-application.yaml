@@ -28,6 +28,13 @@ spec:
         port: 8080
         databases:
           - my-db-connection
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
     - crazycow:
         image: otherimage
         tag: 2.0.1

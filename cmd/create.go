@@ -20,12 +20,32 @@ import (
 	"helmboot/models"
 	"helmboot/utils"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
+
+func performCreate(yamlFile []byte, outDir string) {
+	utils.CreateDir(outDir)
+
+	var application models.Application
+	//var job models.Job
+	err := yaml.Unmarshal(yamlFile, &application)
+	if err != nil {
+		glog.Errorf("Error parsing file: %v", err)
+		panic(err)
+	}
+
+	workloadDir := filepath.Join(outDir, application.Name)
+	utils.CreateDir(workloadDir)
+	utils.ClearDir(workloadDir)
+
+	generator := new(helm.Generator)
+	generator.Write(application, workloadDir)
+}
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -38,39 +58,27 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		glog.Info("create called")
+		glog.Info("Create called")
 
 		outDir, err := cmd.Flags().GetString("output")
-		if err != nil {
-			panic(err)
+		if err != nil || len(outDir) <= 0 {
+			cmd.Help()
+			os.Exit(1)
 		}
-		utils.CreateDir(outDir)
 
 		// Get the input workload name..
 		fileName, err := cmd.Flags().GetString("workload")
-		if err != nil {
-			panic(err)
+		if err != nil || len(fileName) <= 0 {
+			cmd.Help()
+			os.Exit(1)
 		}
+
 		fileName, _ = filepath.Abs(fileName)
 		yamlFile, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			panic(err)
 		}
-
-		var application models.Application
-		//var job models.Job
-		err = yaml.Unmarshal(yamlFile, &application)
-		if err != nil {
-			glog.Errorf("Error parsing file: %v", err)
-			panic(err)
-		}
-
-		workloadDir := filepath.Join(outDir, application.Name)
-		utils.CreateDir(workloadDir)
-		utils.ClearDir(workloadDir)
-
-		generator := new(helm.Generator)
-		generator.Write(application, workloadDir)
+		performCreate(yamlFile, outDir)
 	},
 }
 

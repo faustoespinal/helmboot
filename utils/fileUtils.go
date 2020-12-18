@@ -69,3 +69,12 @@ func OutputTemplate(templateValues interface{}, templateContent string, filePath
 		panic(err)
 	}
 }
+
+// FileExists returns true if a file exists and false otherwise
+func FileExists(name string) bool {
+	_, err := os.Stat(name)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return err == nil
+}

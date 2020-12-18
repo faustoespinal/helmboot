@@ -4,6 +4,7 @@ package models
 type MetaApplication struct {
 	Meta struct {
 		ReleaseName string `yaml:"releaseName"`
+		Namespace   string `yaml:"namespace"`
 	} `yaml:"meta"`
 	Application Application `yaml:"application"`
 }
@@ -13,6 +14,7 @@ func CreateMetaApplication(app Application) MetaApplication {
 	var metaApp = MetaApplication{}
 
 	metaApp.Meta.ReleaseName = "{{ .ReleaseName }}"
+	metaApp.Meta.Namespace = "{{ Release.Namespace }}"
 	metaApp.Application = app
 	return metaApp
 }

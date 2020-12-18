@@ -84,4 +84,8 @@ type Workload struct {
 	Databases []string `yaml:"databases,omitempty"`
 	// List of messaging connections
 	Messaging []string `yaml:"messaging,omitempty"`
+	Resources *struct {
+		Requests *ResourceSpec `yaml:"requests,omitempty"`
+		Limits   *ResourceSpec `yaml:"limits,omitempty"`
+	} `yaml:"resources,omitempty"`
 }

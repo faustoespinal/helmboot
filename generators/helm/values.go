@@ -4,6 +4,8 @@ import (
 	"helmboot/models"
 	"helmboot/utils"
 	"path/filepath"
+
+	"github.com/golang/glog"
 )
 
 const workloadTmpl = `
@@ -22,21 +24,6 @@ const workloadTmpl = `
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## {{ $key }} pods' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
 `
 
 const valuesTmpl = `
@@ -50,6 +37,24 @@ registry: docker.io
     tag: {{ $value.Tag }}
 ` + workloadTmpl +
 	`
+  ## {{ $key }} pods' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##  
+  {{- if $value.Resources }}
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  {{- else }}
+  resources: {}
+  {{- end }}  # Resources
 {{- end}}
 {{- end}}
 {{- end}}
@@ -62,6 +67,24 @@ registry: docker.io
     tag: {{ $value.Tag }}
 ` + workloadTmpl +
 	`
+  ## {{ $key }} pods' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##  
+  {{- if $value.Resources }}
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  {{- else }}
+  resources: {}
+  {{- end }}  # Resources
 {{- end}}
 {{- end}}
 {{- end}}
@@ -115,5 +138,6 @@ serviceAccount:
 
 // WriteValues outputs the values.yaml
 func WriteValues(application models.Application, outDir string) {
+	glog.Infof("Writing values.yaml")
 	utils.OutputTemplate(application, valuesTmpl, filepath.Join(outDir, "values.yaml"))
 }

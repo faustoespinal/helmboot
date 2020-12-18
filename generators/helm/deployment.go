@@ -76,10 +76,10 @@ spec:
 		{{- end }}
         ports:
         - name: {{ $key }}-http
-          port: {{ $value.Port }}
-        resources:
-          requests: {{"{{"}} .Values.{{ $key }}.resources.requests {{"}}"}}
-          limits: {{"{{"}} .Values.{{ $key }}.resources.limits {{"}}"}}
+          containerPort: {{ $value.Port }}
+        {{"{{"}} if .Values.{{ $key }}.resources {{"}}"}}
+        resources: {{"{{"}} .Values.{{ $key }}.resources {{"}}"}}
+        {{"{{"}} end {{"}}"}}
 		{{- if $value.Storage }}
         volumeMounts:
 		{{- range $value.Storage }}

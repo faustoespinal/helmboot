@@ -1,0 +1,56 @@
+apiVersion: helmboot/beta/v1
+type: application  # application, microservice, job
+name: bookinfo
+description: "This is a deployment of my awesome application"
+version: 1.0.0
+appVersion: 2.0.1
+spec:
+  security:
+    grantTypes: 
+      - implicit
+    roles:
+      - bkiadmin:
+          scopes:
+            - scope1
+            - scope2
+      - bkiuser:
+          scopes:
+            - scope1
+  deployments:
+    - details:
+        image: docker.io/istio/examples-bookinfo-details-v1
+        tag: 1.16.2
+        port: 9080
+    - ratings:
+        image: docker.io/istio/examples-bookinfo-ratings-v1
+        tag: 1.16.2
+        port: 9080
+    - reviewsv1:
+        image: docker.io/istio/examples-bookinfo-reviews-v1
+        tag: 1.16.2
+        port: 9080
+    - reviewsv2:
+        image: docker.io/istio/examples-bookinfo-reviews-v2
+        tag: 1.16.2
+        port: 9080
+    - reviewsv3:
+        image: docker.io/istio/examples-bookinfo-reviews-v3
+        tag: 1.16.2
+        port: 9080
+    - productpage:
+        image: docker.io/istio/examples-bookinfo-productpage-v1
+        tag: 1.16.2
+        port: 9080
+  services:
+    - details:
+        deployment: details
+    - ratings:
+        deployment: ratings
+    - reviews:
+        deployment: reviewsv1
+    - productpage:
+        deployment: productpage
+  ingresses:
+    - productpage:
+        service: productpage
+

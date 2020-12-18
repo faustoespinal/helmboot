@@ -6,31 +6,6 @@ import (
 	"path/filepath"
 )
 
-// IngressTemplate defines the base template for an Ingress resource
-const IngressTemplate1 = `
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{.Name}}
-  annotations:
-    {{range .Annotations}}
-	{{.Key}}: {{.Value}}
-	{{end}}
-spec:
-  rules:
-  - http:
-	  paths:
-	  {{range .Paths}}
-      - path: {{.PathPrefix}}
-        pathType: Prefix
-        backend:
-          service:
-            name: {{.DownstreamSvc}}
-            port:
-			  number: {{.SvcPort}}
-	  {{end}}
-`
-
 // IngressTemplate defines a template of a kubernetes service
 const IngressTemplate = `
 {{- $outer := . }}
@@ -45,26 +20,26 @@ metadata:
     plugins.konghq.com: jwt,authz
   name: {{ $key }}
 spec:
-rules:
-- http:
-  paths:
-    - path: /{{ $outer.Application.Name }}/{{ $value.Service }}
-      pathType: Prefix
-      backend:
-        service:
-          name: {{ $value.Service }}
-          port:
-            number: {{"{{"}} .Values.service.{{ $value.Service }}.port {{"}}"}}
+  rules:
+  - http:
+      paths:
+        - path: /{{ $outer.Application.Name }}/{{ $value.Service }}
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $value.Service }}
+              port:
+                number: {{"{{"}} .Values.service.{{ $value.Service }}.port {{"}}"}}
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongIngress
 metadata:
-  name: {{ $key }}-kong
+  name: {{ $key }}-kong
 proxy:
-  path: /{{ $outer.Application.Name }}/{{ $value.Service }}
+  path: /{{ $outer.Application.Name }}/{{ $value.Service }}
 route:
   strip_path: true
-  preserve_host: false
+  preserve_host: false
 {{- if $value.Namespace }}
 ---
 apiVersion: v1
@@ -75,7 +50,6 @@ spec:
   type: ExternalName
   externalName: {{ $value.ExternalService }}.{{ $value.Namespace }}.cluster.local
 {{- end }}
-
 {{- end }}
 {{- end }}
 {{- end }}

@@ -72,9 +72,7 @@ spec:
 		{{- end }}
 		{{- end }}
 		{{- end }}
-        resources:
-          requests: {{"{{"}} .Values.{{ $key }}.resources.requests {{"}}"}}
-          limits: {{"{{"}} .Values.{{ $key }}.resources.limits {{"}}"}}
+        resources: {{"{{"}} .Values.{{ $key }}.resources {{"}}"}}
 		{{- if $value.Storage }}
         volumeMounts:
 		{{- range $value.Storage }}
