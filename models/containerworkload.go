@@ -5,10 +5,18 @@ type ContainerWorkload struct {
 	// Image base name
 	Image string `yaml:"image"`
 	// Version tag of the image
-	Tag        string   `yaml:"tag"`
+	Tag string `yaml:"tag"`
+	// Environment variables array
+	Env []struct {
+		Name  string `yaml:"name"`
+		Value string `yaml:"value"`
+	} `yaml:"env,omitempty"`
 	ConfigMaps []string `yaml:"configmaps,omitempty"`
 	Secrets    []string `yaml:"secrets,omitempty"`
-	Port       int      `yaml:"port"`
+	Ports      []struct {
+		Name string `yaml:"name,omitempty"`
+		Port int    `yaml:"containerPort"`
+	} `yaml:"ports,omitempty"`
 	// List of storage mounts
 	Storage []map[string]StorageMount `yaml:"storage,omitempty"`
 	// List of database connections

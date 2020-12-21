@@ -37,8 +37,14 @@ spec:
       - name: {{ $key }}
         image: {{"{{"}} .Values.{{ $key }}.image.repository {{"}}"}}:{{"{{"}} .Values.{{ $key }}.image.tag {{"}}"}}
         imagePullPolicy: {{"{{"}} .Values.pullPolicy {{"}}"}}
-		{{- if or ($value.ConfigMaps) ($value.Secrets) ($value.Databases) }}
+		{{- if or ($value.Env) ($value.ConfigMaps) ($value.Secrets) ($value.Databases) }}
         env:
+    {{- if $value.Env }}
+    {{- range $value.Env }}
+        - name: {{ .Name }}
+          value: "{{ .Value }}"
+    {{- end }}
+    {{- end }}
 		{{- if $value.ConfigMaps }}
 		{{- range $value.ConfigMaps }}
 		   {{- $cmap := . }}
@@ -137,8 +143,12 @@ spec:
 		{{- end }}
 		{{- end }}
         ports:
-        - name: {{ $key }}-http
-          containerPort: {{ $value.Port }}
+    {{- range $value.Ports }}
+        - containerPort: {{ .Port }}
+        {{- if .Name }}
+          name: {{ .Name }}
+        {{- end }}
+    {{- end }}
         securityContext:
           runAsUser: 1000
         {{"{{"}} if .Values.{{ $key }}.resources {{"}}"}}

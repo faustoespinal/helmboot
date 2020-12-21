@@ -35,9 +35,15 @@ spec:
       - name: {{ $key }}
         image: {{"{{"}} .Values.{{ $key }}.image.repository {{"}}"}}:{{"{{"}} .Values.{{ $key }}.image.tag {{"}}"}}
         imagePullPolicy: {{"{{"}} .Values.pullPolicy {{"}}"}}
-		{{- if or ($value.ConfigMaps) ($value.Secrets) ($value.Databases) }}
+		{{- if or ($value.Env) ($value.ConfigMaps) ($value.Secrets) ($value.Databases) }}
         env:
-		{{- if $value.ConfigMaps }}
+    {{- if $value.Env }}
+    {{- range $value.Env }}
+        - name: {{ .Name }}
+          value: "{{ .Value }}"
+    {{- end }}
+    {{- end }}    
+    {{- if $value.ConfigMaps }}
 		{{- range $value.ConfigMaps }}
 		   {{- $cmap := . }}
 		   {{- range $outer.Application.Spec.ConfigMaps }}

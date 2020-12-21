@@ -1,7 +1,7 @@
 apiVersion: helmboot/beta/v1
 type: application  # application, microservice, job
-name: bookinfo
-description: "This is a deployment of Istio bookinfo sample application"
+name: emojivoto
+description: "This is a deployment of the LinkerD emojivoto sample application"
 version: 1.0.0
 appVersion: 2.0.1
 spec:
@@ -17,36 +17,34 @@ spec:
           scopes:
             - scope1
   deployments:
-    - details:
-        image: docker.io/istio/examples-bookinfo-details-v1
-        tag: 1.16.2
+    - emoji:
+        image: buoyantio/emojivoto-emoji-svc
+        tag: v10
         ports: 
-          - containerPort: 9080
+        - containerPort: 8080
+          name: grpc
+        - containerPort: 8801
+          name: prom
     - ratings:
         image: docker.io/istio/examples-bookinfo-ratings-v1
         tag: 1.16.2
-        ports: 
-          - containerPort: 9080
+        port: 9080
     - reviewsv1:
         image: docker.io/istio/examples-bookinfo-reviews-v1
         tag: 1.16.2
-        ports: 
-          - containerPort: 9080
+        port: 9080
     - reviewsv2:
         image: docker.io/istio/examples-bookinfo-reviews-v2
         tag: 1.16.2
-        ports: 
-          - containerPort: 9080
+        port: 9080
     - reviewsv3:
         image: docker.io/istio/examples-bookinfo-reviews-v3
         tag: 1.16.2
-        ports: 
-          - containerPort: 9080
+        port: 9080
     - productpage:
         image: docker.io/istio/examples-bookinfo-productpage-v1
         tag: 1.16.2
-        ports: 
-          - containerPort: 9080
+        port: 9080
   services:
     - details:
         deployment: details

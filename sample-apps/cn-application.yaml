@@ -25,7 +25,13 @@ spec:
           - otherconfig
         secrets:
           - appsecret1
-        port: 8080
+        env:
+          - name: INIT_MESSAGE
+            value: "Hello there"
+        ports: 
+          - containerPort: 8080
+            name: deadbeef-http
+          - containerPort: 8081
         databases:
           - my-db-connection
         resources:
@@ -39,7 +45,10 @@ spec:
         image: otherimage
         tag: 2.0.1
         secret: appsecret1
-        port: 8082
+        ports: 
+          - containerPort: 8082
+            name: crazycow-http
+          - containerPort: 8081
         secrets:
           - appsecret1
         messaging:
@@ -56,6 +65,9 @@ spec:
         command: "echo Initializing; ls -ls"
         configmaps:
           - appconfig
+        env:
+          - name: INIT_THE_MESSAGE
+            value: "Hello there again"
         databases:
           - my-db-connection
         storage:
