@@ -44,6 +44,9 @@ func (g *Generator) Write(application models.Application, outDir string) {
 	if len(application.Spec.Jobs) > 0 {
 		WriteJobs(metaApp, templateDir)
 	}
+	if len(application.Spec.Deployments) > 0 || len(application.Spec.Jobs) > 0 {
+		WriteServiceAccounts(metaApp, templateDir)
+	}
 	if len(application.Spec.ConfigMaps) > 0 {
 		WriteConfigmaps(metaApp, templateDir)
 	}
