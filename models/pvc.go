@@ -1,11 +1,8 @@
 package models
 
-// Pvc is a storage claim made by a cloud-native application
+// Pvc describes a persistent storage request for an application
 type Pvc struct {
-	// Name is the storage claim name
-	Name string `yaml:"name"`
-	// StorageClass is the type of storage desired
+	Size         string `yaml:"size"`
+	Mode         string `yaml:"mode,omitempty"`
 	StorageClass string `yaml:"storageClass,omitempty"`
-	// StorageRequest is the amount of storage requested
-	StorageRequest string `yaml:"storageRequest,omitempty"`
 }

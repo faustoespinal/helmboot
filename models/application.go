@@ -16,16 +16,16 @@ type Application struct {
 			Roles      []map[string]AppRole `yaml:"roles"`
 		} `yaml:"security"`
 		// List of deployments
-		Deployments []map[string]Workload `yaml:"deployments,omitempty"`
+		Deployments []map[string]ContainerWorkload `yaml:"deployments,omitempty"`
 		// List of time-boxed jobs
-		Jobs       []map[string]Workload     `yaml:"jobs,omitempty"`
-		Services   []map[string]AppService   `yaml:"services,omitempty"`
-		Ingresses  []map[string]AppIngress   `yaml:"ingresses,omitempty"`
-		ConfigMaps []map[string]AppConfigMap `yaml:"configmaps,omitempty"`
-		Secrets    []map[string]AppSecret    `yaml:"secrets,omitempty"`
-		Storage    []map[string]AppStorage   `yaml:"storage,omitempty"`
-		Databases  []string                  `yaml:"databases,omitempty"`
-		Messaging  []string                  `yaml:"messaging,omitempty"`
+		Jobs       []map[string]ContainerWorkload `yaml:"jobs,omitempty"`
+		Services   []map[string]AppService        `yaml:"services,omitempty"`
+		Ingresses  []map[string]AppIngress        `yaml:"ingresses,omitempty"`
+		ConfigMaps []map[string]AppConfigMap      `yaml:"configmaps,omitempty"`
+		Secrets    []map[string]Secret            `yaml:"secrets,omitempty"`
+		Storage    []map[string]Pvc               `yaml:"storage,omitempty"`
+		Databases  []string                       `yaml:"databases,omitempty"`
+		Messaging  []string                       `yaml:"messaging,omitempty"`
 	} `yaml:"spec"`
 }
 
@@ -39,24 +39,11 @@ type AppService struct {
 	Deployment string `yaml:"deployment"`
 }
 
-// AppStorage describes a unit of storage for an application
-type AppStorage struct {
-	Size         string `yaml:"size"`
-	Mode         string `yaml:"mode,omitempty"`
-	StorageClass string `yaml:"storageClass,omitempty"`
-}
-
 // AppIngress describes an ingress
 type AppIngress struct {
 	Service         string `yaml:"service"`
 	Namespace       string `yaml:"namespace,omitempty"`
 	ExternalService string `yaml:"externalService,omitempty"`
-}
-
-// AppSecret encodes application private information items
-type AppSecret struct {
-	Type string   `yaml:"type"`
-	Data []string `yaml:"data"`
 }
 
 // AppConfigMap defines alternate ways of encoding configuration data in a file and/or key/value pairs
@@ -67,25 +54,4 @@ type AppConfigMap struct {
 // StorageMount describes the way to mount a unit of storage
 type StorageMount struct {
 	Mount string `yaml:"mount,omitempty"`
-}
-
-// Workload describes a workload run as a deployment or job
-type Workload struct {
-	// Image base name
-	Image string `yaml:"image"`
-	// Version tag of the image
-	Tag        string   `yaml:"tag"`
-	ConfigMaps []string `yaml:"configmaps,omitempty"`
-	Secrets    []string `yaml:"secrets,omitempty"`
-	Port       int      `yaml:"port"`
-	// List of storage mounts
-	Storage []map[string]StorageMount `yaml:"storage,omitempty"`
-	// List of database connections
-	Databases []string `yaml:"databases,omitempty"`
-	// List of messaging connections
-	Messaging []string `yaml:"messaging,omitempty"`
-	Resources *struct {
-		Requests *ResourceSpec `yaml:"requests,omitempty"`
-		Limits   *ResourceSpec `yaml:"limits,omitempty"`
-	} `yaml:"resources,omitempty"`
 }
