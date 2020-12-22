@@ -97,8 +97,8 @@ service:
   {{- if .Spec.Services}}
   {{- range .Spec.Services}}
   {{- range $key, $value := . }}
-  ## {{ $key }} service definition
-  {{ $key }}:
+  ## {{ snakecase $key }} service definition
+  {{ snakecase $key }}:
     type: ClusterIP
     port: 8080
   {{- end}}

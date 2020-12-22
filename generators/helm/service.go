@@ -18,10 +18,10 @@ kind: Service
 metadata:
   name: {{ $key }}
 spec:
-  type: {{"{{"}} .Values.service.{{ $key }}.type {{"}}"}}
+  type: {{"{{"}} .Values.service.{{ snakecase $key }}.type {{"}}"}}
   ports:
     - name: {{ $key }}
-      port: {{"{{"}} .Values.service.{{ $key }}.port {{"}}"}}
+      port: {{"{{"}} .Values.service.{{ snakecase $key }}.port {{"}}"}}
       targetPort: {{ $value.Deployment }}
   selector:
     app: {{ $value.Deployment }}

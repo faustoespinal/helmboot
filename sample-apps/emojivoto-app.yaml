@@ -20,41 +20,58 @@ spec:
     - emoji:
         image: buoyantio/emojivoto-emoji-svc
         tag: v10
+        env:
+        - name: GRPC_PORT
+          value: "8080"
+        - name: PROM_PORT
+          value: "8801"
         ports: 
         - containerPort: 8080
           name: grpc
         - containerPort: 8801
           name: prom
-    - ratings:
-        image: docker.io/istio/examples-bookinfo-ratings-v1
-        tag: 1.16.2
-        port: 9080
-    - reviewsv1:
-        image: docker.io/istio/examples-bookinfo-reviews-v1
-        tag: 1.16.2
-        port: 9080
-    - reviewsv2:
-        image: docker.io/istio/examples-bookinfo-reviews-v2
-        tag: 1.16.2
-        port: 9080
-    - reviewsv3:
-        image: docker.io/istio/examples-bookinfo-reviews-v3
-        tag: 1.16.2
-        port: 9080
-    - productpage:
-        image: docker.io/istio/examples-bookinfo-productpage-v1
-        tag: 1.16.2
-        port: 9080
+    - votebot:
+        image: buoyantio/emojivoto-web
+        tag: v10
+        env:
+        - name: WEB_HOST
+          value: web-svc.emojivoto:80
+    - voting:
+        image: buoyantio/emojivoto-voting-svc
+        tag: v10
+        env:
+        - name: GRPC_PORT
+          value: "8080"
+        - name: PROM_PORT
+          value: "8801"
+        ports: 
+        - containerPort: 8080
+          name: grpc
+        - containerPort: 8801
+          name: prom
+    - web:
+        image: buoyantio/emojivoto-web
+        tag: v10
+        env:
+        - name: WEB_PORT
+          value: "8080"
+        - name: EMOJISVC_HOST
+          value: emoji-svc.emojivoto:8080
+        - name: VOTINGSVC_HOST
+          value: voting-svc.emojivoto:8080
+        - name: INDEX_BUNDLE
+          value: dist/index_bundle.js
+        ports: 
+        - containerPort: 8080
+          name: http
   services:
-    - details:
+    - emoji-svc:
         deployment: details
-    - ratings:
+    - voting-svc:
         deployment: ratings
-    - reviews:
+    - web-svc:
         deployment: reviewsv1
-    - productpage:
-        deployment: productpage
   ingresses:
-    - productpage:
-        service: productpage
+    - web-svc:
+        service: web-svc
 

@@ -29,7 +29,7 @@ spec:
             service:
               name: {{ $value.Service }}
               port:
-                number: {{"{{"}} .Values.service.{{ $value.Service }}.port {{"}}"}}
+                number: {{"{{"}} .Values.service.{{ snakecase $value.Service }}.port {{"}}"}}
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongIngress

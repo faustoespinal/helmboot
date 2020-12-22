@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
+
+	"github.com/Masterminds/sprig"
 )
 
 // CreateDir creates specified directory and return true if successful, false otherwise
@@ -60,10 +62,10 @@ func OutputTemplate(templateValues interface{}, templateContent string, filePath
 	}
 	defer outFile.Close()
 
-	tmpl, err := template.New("helm").Parse(templateContent)
-	if err != nil {
-		panic(err)
-	}
+	//tmpl, err := template.New("helm").Parse(templateContent)
+	tt, err := template.New("helm").Funcs(sprig.FuncMap()).Parse(templateContent)
+	tmpl := template.Must(tt, err)
+
 	err = tmpl.Execute(outFile, templateValues)
 	if err != nil {
 		panic(err)
