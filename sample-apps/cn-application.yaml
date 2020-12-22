@@ -16,6 +16,10 @@ spec:
       - joeuser:
           scopes:
             - scope1
+  testing:
+    image: curlimages/curl:7.74.0
+    command: ['curl']
+    args: ['http://svc-1:80']
   deployments:
     - deadbeef:
         image: someimage

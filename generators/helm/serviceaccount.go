@@ -8,6 +8,7 @@ import (
 
 // ServiceAccountTemplate defines a template of a kubernetes configmap
 const ServiceAccountTemplate = `
+{{"{{-"}} if .Values.serviceAccount.create {{"}}"}}
 {{- $outer := . }}
 {{- if .Application.Spec.Deployments }}
 {{- range .Application.Spec.Deployments }}
@@ -35,6 +36,8 @@ metadata:
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{"{{-"}} end {{"}}"}}
 `
 
 // WriteServiceAccounts outputs the service account templates for these charts

@@ -66,4 +66,7 @@ func (g *Generator) Write(application models.Application, outDir string) {
 			edison.WriteEpa(metaApp, templateDir)
 		}
 	}
+	if application.Spec.Testing != nil {
+		WriteSvcTests(metaApp, filepath.Join(templateDir, "tests"))
+	}
 }

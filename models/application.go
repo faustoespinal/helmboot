@@ -26,6 +26,11 @@ type Application struct {
 		Storage    []map[string]Pvc               `yaml:"storage,omitempty"`
 		Databases  []string                       `yaml:"databases,omitempty"`
 		Messaging  []string                       `yaml:"messaging,omitempty"`
+		Testing    *struct {
+			Image   string   `yaml:"image"`
+			Command []string `yaml:"command"`
+			Args    []string `yaml:"args"`
+		} `yaml:"testing,omitempty"`
 	} `yaml:"spec"`
 }
 

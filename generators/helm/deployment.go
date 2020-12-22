@@ -32,7 +32,9 @@ spec:
       labels:
         app: {{ $key }}
     spec:
+      {{"{{-"}} if .Values.serviceAccount.create {{"}}"}}
       serviceAccountName: {{ $key }}
+      {{"{{-"}} end {{"}}"}}
       containers:
       - name: {{ $key }}
         image: {{"{{"}} .Values.{{ $key }}.image.repository {{"}}"}}:{{"{{"}} .Values.{{ $key }}.image.tag {{"}}"}}

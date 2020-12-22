@@ -29,7 +29,9 @@ spec:
       labels:
         app: {{ $key }}
     spec:
+      {{"{{-"}} if .Values.serviceAccount.create {{"}}"}}
       serviceAccountName: {{ $key }}
+      {{"{{-"}} end {{"}}"}}
       restartPolicy: Never
       containers:
       - name: {{ $key }}
