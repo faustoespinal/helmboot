@@ -36,7 +36,7 @@ func WriteSvcTests(metaApp models.MetaApplication, outDir string) {
 	glog.Infof("Writing helm-svc testing")
 
 	for _, svc := range metaApp.Application.Spec.Services {
-		for svcKey, _ := range svc {
+		for svcKey := range svc {
 			tinfo := TestInfo{
 				TargetService: svcKey,
 				Application:   metaApp.Application,

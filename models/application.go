@@ -14,7 +14,7 @@ type Application struct {
 		Security struct {
 			GrantTypes []string             `yaml:"grantTypes"`
 			Roles      []map[string]AppRole `yaml:"roles"`
-		} `yaml:"security"`
+		} `yaml:"security,omitempty"`
 		// List of deployments
 		Deployments []map[string]ContainerWorkload `yaml:"deployments,omitempty"`
 		// List of time-boxed jobs
