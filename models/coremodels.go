@@ -1,5 +1,12 @@
 package models
 
+// ChartValue describes a helm chart value
+type ChartValue struct {
+	Name         string
+	Description  string
+	DefaultValue string
+}
+
 // Port is a service or container port descriptor
 type Port struct {
 	// Name is the port name

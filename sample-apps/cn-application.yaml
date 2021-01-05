@@ -1,6 +1,6 @@
 apiVersion: helmboot/beta/v1
 type: application  # application, microservice, job
-name: myapp
+name: cn-application
 description: "This is a deployment of my awesome application"
 version: 1.0.0
 appVersion: 2.0.1

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bytes"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -52,6 +53,20 @@ func WriteFile(content string, filePath string) error {
 		return err
 	}
 	return nil
+}
+
+// SOutputTemplate evaluates an output template onto a string and returns it
+func SOutputTemplate(templateValues interface{}, templateContent string) string {
+	var writer bytes.Buffer
+
+	tt, err := template.New("helm").Funcs(sprig.FuncMap()).Parse(templateContent)
+	tmpl := template.Must(tt, err)
+
+	err = tmpl.Execute(&writer, templateValues)
+	if err != nil {
+		panic(err)
+	}
+	return writer.String()
 }
 
 // OutputTemplate evaluates an output template

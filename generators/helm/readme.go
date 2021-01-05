@@ -6,47 +6,35 @@ import (
 	"path/filepath"
 )
 
-const readmeTmpl = `
-# {{.Name}}
-
-[Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
+const readmeTmplHeader = `
+# {{ .Name }}
 
 ## Overview
+{{ .Description }}
 
 ` + "```bash" + `
 # Testing configuration
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redis
+$ helm repo add ehs https://cp-nexus-0.novalocal
+$ helm install my-{{ .Name }} ehs/{{ .Name }}
 ` + "```" + `
 
 ` + "```bash" + `
 # Production configuration
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/redis --values values-production.yaml
+$ helm repo add ehs https://charts.bitnami.com/bitnami
+$ helm install my-{{ .Name }} ehs/{{ .Name }} --values additional_values.yaml
 ` + "```" + `
 
 ## Introduction
 
-This chart bootstraps a [Redis](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [{{ .Name }}](https://github.com/{{ .Name }}) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Helm boot charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
-### Choose between Redis Helm Chart and Redis Cluster Helm Chart
-
-You can choose any of the two Redis Helm charts for deploying a Redis cluster.
-While [Redis Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster using Redis Sentinel, the [Redis Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis Cluster topology with sharding.
-The main features of each chart are the following:
-
-| Redis                                         | Redis Cluster                                                                                                                                       |
-|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| Supports multiple databases                   | Supports only one database. Better if you have a big dataset                                                                                        |
-| Single write point (single master)            | Multiple write points (multiple masters)                                                                                                            |
-| ![Redis Topology](img/redis-topology.png)     | ![Redis Cluster Topology](img/redis-cluster-topology.png)                                                                                           |
 
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -54,19 +42,19 @@ The main features of each chart are the following:
 To install the chart with the release name "my-release":
 
 ` + "```bash" + `
-$ helm install my-release bitnami/redis
+$ helm install my-{{ .Name }} ehs/{{ .Name }}
 ` + "```" + `
 
-The command deploys Redis on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys {{ .Name }} on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using "helm list"
 
 ## Uninstalling the Chart
 
-To uninstall/delete the "my-release" deployment:
+To uninstall/delete the "my-{{ .Name }}" deployment:
 
 ` + "```bash" + `
-$ helm delete my-release
+$ helm delete my-{{ .Name }}
 ` + "```" + `
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -75,49 +63,173 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the Redis chart and their default values.
 
+`
+
+const readmeTmplParams = `
 | Parameter                                     | Description                                                                                                                                         | Default                                                 |
 |-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | global.imageRegistry                        | Global Docker image registry                                                                                                                        | "nil"                                                   |
 | global.imagePullSecrets                     | Global Docker registry secret names as an array                                                                                                     | [] (does not add image pull secrets to deployed pods) |
 | global.storageClass                         | Global storage class for dynamic provisioning                                                                                                       | "nil"                                                   |
 | global.redis.password                       | Redis password (overrides password)                                                                                                               | "nil"                                                   |
-| image.registry                              | Redis Image registry                                                                                                                                | docker.io                                             |
-| image.repository                            | Redis Image name                                                                                                                                    | bitnami/redis                                         |
-| image.tag                                   | Redis Image tag                                                                                                                                     | {TAG_NAME}                                            |
-| image.pullPolicy                            | Image pull policy                                                                                                                                   | IfNotPresent                                          |
-| image.pullSecrets                           | Specify docker-registry secret names as an array                                                                                                    | "nil"                                                   |
-| nameOverride                                | String to partially override redis.fullname template with a string (will prepend the release name)                                                  | "nil"                                                   |
-| fullnameOverride                            | String to fully override redis.fullname template with a string                                                                                      | "nil"                                                   |
-| cluster.enabled                             | Use master-slave topology                                                                                                                           | true                                                  |
-| cluster.slaveCount                          | Number of slaves                                                                                                                                    | 2                                                     |
-| existingSecret                              | Name of existing secret object (for password authentication)                                                                                        | "nil"                                                   |
-| existingSecretPasswordKey                   | Name of key containing password to be retrieved from the existing secret                                                                            | "nil"                                                   |
-| usePassword                                 | Use password                                                                                                                                        | true                                                  |
-| usePasswordFile                             | Mount passwords as files instead of environment variables                                                                                           | false                                                 |
-| password                                    | Redis password (ignored if existingSecret set)                                                                                                      | Randomly generated                                      |
-| configmap                                   | Additional common Redis node configuration (this value is evaluated as a template)                                                                  | See values.yaml                                         |
-| clusterDomain                               | Kubernetes DNS Domain name to use                                                                                                                   | cluster.local                                         |
-| networkPolicy.enabled                       | Enable NetworkPolicy                                                                                                                                | false                                                 |
-| podSecurityPolicy.create                    | Specifies whether a PodSecurityPolicy should be created                                                                                             | false                                                 |
+`
+
+const readmeTmplFooter = `
 
 Specify each parameter using the "--set key=value[,key=value]" argument to "helm install". For example,
 
 ` + "```bash" + `
-$ helm install my-release \
-  --set password=secretpassword \
-    bitnami/redis
+$ helm install my-{{ .Name }} --set {{ .Name }}.key="thevalue" ehs/{{ .Name }}
 ` + "```" + `
 
-The above command sets the Redis server password to "secretpassword".
+The above command sets the release {{ .Name }} helm chart value {{ .Name }}.key to "thevalue".
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ` + "```bash" + `
-$ helm install my-release -f values.yaml bitnami/redis
+$ helm install my-{{ .Name }} -f values.yaml ehs/{{ .Name }}
 ` + "```"
+
+var commonValues = []models.ChartValue{
+	{Name: "pullPolicy",
+		Description:  "Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' (ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images)",
+		DefaultValue: "IfNotPresent",
+	},
+	{Name: "registry",
+		Description:  "Registry locator for the helm docker images",
+		DefaultValue: "nul",
+	},
+	{Name: "containerSecurityContext.enabled",
+		Description:  "Whether to enable settings enforcing container security context",
+		DefaultValue: "true",
+	},
+	{Name: "containerSecurityContext.runAsUser",
+		Description:  "The id of the user to use when running under a security context",
+		DefaultValue: "1001",
+	},
+	{Name: "serviceAccount.create",
+		Description:  "Whether to create a service account for this helm deployment",
+		DefaultValue: "false",
+	},
+	{Name: "serviceAccount.name",
+		Description:  "The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template",
+		DefaultValue: "nul",
+	},
+	{Name: "livenessProbe.enabled",
+		Description:  "Whether to enable liveness probe on container",
+		DefaultValue: "true",
+	},
+	{Name: "livenessProbe.initialDelaySeconds",
+		Description:  "Number of seconds after the container has started before liveness or readiness probes are initiated. Defaults to 0 seconds. Minimum value is 0.",
+		DefaultValue: "30",
+	},
+	{Name: "livenessProbe.periodSeconds",
+		Description:  "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+		DefaultValue: "10",
+	},
+	{Name: "livenessProbe.timeoutSeconds",
+		Description:  "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+		DefaultValue: "5",
+	},
+	{Name: "livenessProbe.successThreshold",
+		Description:  "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup Probes. Minimum value is 1.",
+		DefaultValue: "1",
+	},
+	{Name: "livenessProbe.failureThreshold",
+		Description:  "When a probe fails, Kubernetes will try failureThreshold times before giving up. Giving up in case of liveness probe means restarting the container. In case of readiness probe the Pod will be marked Unready. Defaults to 3. Minimum value is 1.",
+		DefaultValue: "5",
+	},
+	{Name: "readinessProbe.enabled",
+		Description:  "Whether to enable liveness probe on container",
+		DefaultValue: "true",
+	},
+	{Name: "readinessProbe.initialDelaySeconds",
+		Description:  "Number of seconds after the container has started before liveness or readiness probes are initiated. Defaults to 0 seconds. Minimum value is 0.",
+		DefaultValue: "30",
+	},
+	{Name: "readinessProbe.periodSeconds",
+		Description:  "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+		DefaultValue: "10",
+	},
+	{Name: "readinessProbe.timeoutSeconds",
+		Description:  "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+		DefaultValue: "5",
+	},
+	{Name: "readinessProbe.successThreshold",
+		Description:  "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup Probes. Minimum value is 1.",
+		DefaultValue: "1",
+	},
+	{Name: "readinessProbe.failureThreshold",
+		Description:  "When a probe fails, Kubernetes will try failureThreshold times before giving up. Giving up in case of liveness probe means restarting the container. In case of readiness probe the Pod will be marked Unready. Defaults to 3. Minimum value is 1.",
+		DefaultValue: "5",
+	},
+}
+
+func getValues(workloads []map[string]models.ContainerWorkload) []models.ChartValue {
+	values := make([]models.ChartValue, 0)
+	for _, workloadMap := range workloads {
+		for workloadName := range workloadMap {
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".image.repository",
+				Description:  "Container image repository",
+				DefaultValue: "nul",
+			})
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".image.tag",
+				Description:  "Version tag of the container image for the " + workloadName + ".",
+				DefaultValue: "nul",
+			})
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".affinity",
+				Description:  "Affinity for pod assignment (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity",
+				DefaultValue: "{}",
+			})
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".nodeSelector",
+				Description:  "Node labels for pod assignment (https://kubernetes.io/docs/user-guide/node-selection/)",
+				DefaultValue: "{}",
+			})
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".tolerations",
+				Description:  "Tolerations for pod assignment (https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)",
+				DefaultValue: "{}",
+			})
+			values = append(values, models.ChartValue{
+				Name:         workloadName + ".resources",
+				Description:  workloadName + " pods' resource requests and limits",
+				DefaultValue: "{}",
+			})
+		}
+	}
+	return values
+}
 
 // WriteReadmeMd writes the Readme.md file for the HELM chart
 func WriteReadmeMd(application models.Application, outDir string) {
-	utils.OutputTemplate(application, readmeTmpl, filepath.Join(outDir, "README.md"))
-
+	values := make([]models.ChartValue, 0)
+	values = append(values, commonValues...)
+	for _, svcMap := range application.Spec.Services {
+		for svcName := range svcMap {
+			values = append(values, models.ChartValue{
+				Name:         "service." + svcName + ".type",
+				Description:  "One of ClusterIP, NodePort or LoadBalancer",
+				DefaultValue: "ClusterIP",
+			})
+			values = append(values, models.ChartValue{
+				Name:         "service." + svcName + ".port",
+				Description:  "Port number",
+				DefaultValue: "8080",
+			})
+		}
+	}
+	values = append(values, getValues(application.Spec.Deployments)...)
+	values = append(values, getValues(application.Spec.Jobs)...)
+	params := readmeTmplParams
+	for _, cvals := range values {
+		params = params + "| " + cvals.Name + " | " + cvals.Description + " | " + cvals.DefaultValue + " |\n"
+	}
+	readmeHeader := utils.SOutputTemplate(application, readmeTmplHeader)
+	readmeFooter := utils.SOutputTemplate(application, readmeTmplFooter)
+	readme := readmeHeader + params + readmeFooter
+	utils.WriteFile(readme, filepath.Join(outDir, "README.md"))
 }

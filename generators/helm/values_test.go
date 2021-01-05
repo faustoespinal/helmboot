@@ -1,4 +1,4 @@
-testpackage helm
+package helm
 
 import (
 	"helmboot/models"
