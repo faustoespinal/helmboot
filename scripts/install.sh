@@ -9,9 +9,9 @@ version="$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)"
 unameOut="$(uname -s)"
 
 case "${unameOut}" in
-    Linux*)     os=Linux;;
-    Darwin*)    os=Darwin;;
-    CYGWIN*)    os=Cygwin;;
+    Linux*)     os=linux;;
+    Darwin*)    os=osx;;
+    CYGWIN*)    os=windows;;
     MINGW*)     os=windows;;
     *)          os="UNKNOWN:${unameOut}"
 esac
