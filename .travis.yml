@@ -6,6 +6,7 @@ go:
 os:
   - linux
   - osx
+  - windows
 
 notifications:
   slack: 
@@ -17,7 +18,7 @@ notifications:
 script: go test -v ./...
 
 before_deploy:
-  - cp ${GOPATH}/bin/helmboot .; tar cvzf helmboot_${TRAVIS_OS_NAME}.tar.gz ./helmboot
+  - cp ${GOPATH}/bin/helmboot* .; tar cvzf helmboot_${TRAVIS_OS_NAME}.tar.gz ./helmboot*
 
 deploy:
   provider: releases
