@@ -11,7 +11,7 @@ os:
 notifications:
   slack: 
     rooms:
-      - faustohome:R86pQ3z5xcI25gNrLIjxLpcO#latimer
+      - faustohome:R86pQ3z5xcI25gNrLIjxLpcO#helmboot
     on_success: always # default: always
     on_failure: always # default: always
 
