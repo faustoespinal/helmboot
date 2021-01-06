@@ -17,7 +17,7 @@ deploy:
   api_key:
     secure: "XVmCHR6AhT8y8P4k/s4s9zBgoM4UPZymk6Tk97lyHc1oHqtcdAwbrh1sQzHw78aeBSlu6I5KsCnXXzn4zbM9McBoduYz6UaYHpTb45v1cHtUSlaK0FV/k2by5elR5/51ls84VFiY+wsxwYeoUUze0ZA5DR99+OYi2fFdPYn0+zxybzNQfiGhNx6dI4zdNb1wah2brSDQ7Xypr1cOhDj9B8ML8RVrkt+/teBLklQIAP0yayZHTyMzUXaHFU2CBkU8LlRwWkV82ZqpxcW2rmCdEYxeBGkfPwC4YNHTDbFMiE0kkVfbmZdATDcSv56Nxofbj5QGNqcrGOOEAt/Y5dqKo5zGZjfEEOXP0uRrIKsoEg0VgJ4E5/3pRKJ0Kn17bpRfVR1xUNThAEuyMmoCwbVgN79qxsSykT8Z0blNsW8eYLA8XI8TPDVG/asAo2AO2BXc8exqNgIxyE4ogzRup5vLiVCjZCRkZN3Gv5Wj7FUzZSEQZakitC83ArbE36oRptSzzPjb1TU4CI7zIqjAJj/10UUL+BqCaZxEc78hsqsoLBQ70AecCMO23d8dJ6s+rq1J5Xm7H8LvErh0/0mCvtUrDjLbf6OZdt3PM6V5jqstk8OhZ6JAEhzgY0BmVMCF+Qt5q7jEzEW6k2rD1XVlii8IhDMqud7BbWqWl1K6LCt32EQ="
   file: 
-    - helmboot
+    - ${GOPATH}/bin/helmboot
   skip_cleanup: true
   on:
     tags: true
