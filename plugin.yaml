@@ -1,6 +1,6 @@
 Name: "boot"
 version: "0.0.1"
-usage: "Scaffold cloud-native application charts easily"
+usage: "Scaffold cloud-native application helm charts easily"
 description: |-
  Scaffold well-crafted helm application charts using brief yaml descriptor file.
 command: "$HELM_PLUGIN_DIR/bin/helmboot"
