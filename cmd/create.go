@@ -50,15 +50,11 @@ func performCreate(yamlFile []byte, outDir string) {
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Create a helm chart from the given application descriptor",
+	Long: `Create a helm chart from the given application descriptor.
+	     This will generate a compliant helm chart for your application from the given input yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		glog.Info("Create called")
+		glog.Info("Create application.")
 
 		outDir, err := cmd.Flags().GetString("output")
 		if err != nil || len(outDir) <= 0 {

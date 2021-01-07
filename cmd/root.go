@@ -32,12 +32,11 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "helmboot",
 	Short: "Helm plugin to scaffold cloud-native applications as helm charts",
-	Long: `Helmboot scaffolds cloud-native apps using a short hand yaml syntax to generate helm 
+	Long: `Helm boot scaffolds cloud-native apps using a short hand yaml syntax to generate helm 
 	charts implementing several best practices. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	helm boot create --workload <cloud-native-app yaml> --output <helm-chart directory>
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
