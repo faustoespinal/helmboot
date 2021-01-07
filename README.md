@@ -13,5 +13,6 @@ helmboot create --workload sample-apps/cn-application.yaml --output charts/
 
 ## Examples
 
-- [bookinfo app](https://github.com/faustoespinal/helmboot)
-- [emojivoto app](https://github.com/faustoespinal/helmboot)
+- [bookinfo app](https://github.com/faustoespinal/helmboot/blob/main/sample-apps/bookinfo-app.yaml)
+- [emojivoto app](https://github.com/faustoespinal/helmboot/blob/main/sample-apps/emojivoto-app.yaml)
+
