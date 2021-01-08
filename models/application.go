@@ -29,7 +29,7 @@ type Application struct {
 		Testing    *struct {
 			Image   string   `yaml:"image"`
 			Command []string `yaml:"command"`
-			Args    []string `yaml:"args"`
+			Args    []string `yaml:"args,omitempty"`
 		} `yaml:"testing,omitempty"`
 	} `yaml:"spec"`
 }

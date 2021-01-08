@@ -13,9 +13,6 @@ spec:
           scopes:
             - scope1
             - scope2
-      - joeuser:
-          scopes:
-            - scope1
   testing:
     image: curlimages/curl:7.74.0
     command: ['curl']
