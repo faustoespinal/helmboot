@@ -1,0 +1,61 @@
+apiVersion: helmboot/beta/v1
+type: application
+name: guestbook
+description: "This is a deployment of the kubernetes sample guestbook app"
+version: 1.0.0
+appVersion: 1.0.0
+spec:
+  security:
+    grantTypes: 
+      - implicit
+    roles:
+      - gbadmin:
+          scopes:
+            - scope1
+            - scope2
+      - gbuser:
+          scopes:
+            - scope1
+  deployments:
+    - redis-master:
+        image: k8s.gcr.io/redis
+        tag: e2e
+        ports: 
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            #memory: 100Mi
+    - redis-slave:
+        image: k8s.gcr.io/redis
+        tag: e2e
+        ports: 
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+    - frontend:
+        image: gcr.io/google-samples/gb-frontend
+        tag: v4
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
+        ports: 
+        - containerPort: 80
+          name: http
+  services:
+    - redis-master:
+        deployment: redis-master
+    - redis-slave:
+        deployment: redis-slave
+    - frontend:
+        deployment: frontend
+  ingresses:
+    - guestbook:
+        service: frontend
+

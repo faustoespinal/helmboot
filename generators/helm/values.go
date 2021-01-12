@@ -46,12 +46,24 @@ registry: docker.io
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    {{- if $value.Resources.Limits }}
+    limits:
+      cpu: {{ $value.Resources.Limits.CPU | default "100m" }}
+      memory: {{ $value.Resources.Limits.Memory | default "128Mi" }}
+    {{- else }}
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
+    {{- end}}
+    {{- if $value.Resources.Requests }}
+    requests:
+      cpu: {{ $value.Resources.Requests.CPU | default "100m" }}
+      memory: {{ $value.Resources.Requests.Memory | default "128Mi" }}
+    {{- else }}
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+    {{- end }}
   {{- else }}
   resources: {}
   {{- end }}  # Resources
@@ -76,12 +88,24 @@ registry: docker.io
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    {{- if $value.Resources.Limits }}
+    limits:
+      cpu: {{ $value.Resources.Limits.CPU | default "100m" }}
+      memory: {{ $value.Resources.Limits.Memory | default "128Mi" }}
+    {{- else }}
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
+    {{- end}}
+    {{- if $value.Resources.Requests }}
+    requests:
+      cpu: {{ $value.Resources.Requests.CPU | default "100m" }}
+      memory: {{ $value.Resources.Requests.Memory | default "128Mi" }}
+    {{- else }}
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+    {{- end }}
   {{- else }}
   resources: {}
   {{- end }}  # Resources

@@ -92,7 +92,7 @@ const taskApp = `
 apiVersion: helmboot/beta/v1
 type: application
 name: {{ .Name }}
-description: "Sample web service application"
+description: "Sample job-task application"
 version: {{ .Version }}
 appVersion: {{ .AppVersion }}
 spec:
@@ -100,7 +100,7 @@ spec:
     grantTypes: 
       - implicit
     roles:
-      - admin:
+      - task-role:
         scopes:
           - scope1
           - scope2
