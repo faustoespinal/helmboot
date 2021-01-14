@@ -23,8 +23,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 )
 
@@ -35,7 +35,8 @@ func performCreate(yamlFile []byte, outDir string) {
 	//var job models.Job
 	err := yaml.Unmarshal(yamlFile, &application)
 	if err != nil {
-		glog.Errorf("Error parsing file: %v", err)
+		zap.S().Errorf("Error parsing file: %v", err)
+
 		panic(err)
 	}
 
@@ -54,7 +55,7 @@ var createCmd = &cobra.Command{
 	Long: `Create a helm chart from the given application descriptor.
 	     This will generate a compliant helm chart for your application from the given input yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		glog.Info("Create application.")
+		zap.S().Infow("Create application ", "Args", cmd.Flags().Args())
 
 		outDir, err := cmd.Flags().GetString("output")
 		if err != nil || len(outDir) <= 0 {

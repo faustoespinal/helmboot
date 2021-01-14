@@ -20,8 +20,8 @@ import (
 
 	"helmboot/appmodels"
 
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 // initCmd represents the init command
@@ -30,7 +30,7 @@ var initCmd = &cobra.Command{
 	Short: "Initialize an application",
 	Long:  `Initialize an application descriptor from a standard template.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		glog.Info("Initialize an application descriptor.")
+		zap.S().Infof("Initialize an application descriptor.")
 
 		isWebService, _ := cmd.Flags().GetBool("webservice")
 		isTask, _ := cmd.Flags().GetBool("task")
@@ -40,7 +40,7 @@ var initCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		glog.Infof("** Init: %v %v %v\n", isWebService, isTask, appName)
+		zap.S().Infof("** Init: %v %v %v\n", isWebService, isTask, appName)
 		appType := "generic"
 		if isWebService {
 			appType = "web"

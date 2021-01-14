@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -53,6 +54,14 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	// Configure zap logger
+	logger, _ := zap.NewDevelopment()
+	zap.ReplaceGlobals(logger)
+
+	//fmt.Printf("\n*** After replacing the global logger with a production logger\n\n")
+	//logger, _ = zap.NewProduction()
+	//undo := zap.ReplaceGlobals(logger)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

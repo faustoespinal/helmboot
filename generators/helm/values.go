@@ -5,7 +5,7 @@ import (
 	"helmboot/utils"
 	"path/filepath"
 
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 )
 
 const workloadTmpl = `
@@ -158,6 +158,6 @@ serviceAccount:
 
 // WriteValues outputs the values.yaml
 func WriteValues(application models.Application, outDir string) {
-	glog.Infof("Writing values.yaml")
+	zap.S().Infof("Writing values.yaml")
 	utils.OutputTemplate(application, valuesTmpl, filepath.Join(outDir, "values.yaml"))
 }

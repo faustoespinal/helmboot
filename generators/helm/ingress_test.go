@@ -8,8 +8,8 @@ import (
 	"path"
 	"testing"
 
-	"github.com/golang/glog"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 )
 
@@ -50,7 +50,7 @@ func TestWriteIngresses(t *testing.T) {
 	yamlFile := []byte(ingressTestManifest)
 	err = yaml.Unmarshal(yamlFile, &application)
 	if err != nil {
-		glog.Errorf("Error parsing file: %v", err)
+		zap.S().Errorf("Error parsing file: %v", err)
 		panic(err)
 	}
 

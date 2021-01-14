@@ -5,7 +5,7 @@ import (
 	"helmboot/models"
 	"path/filepath"
 
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 )
 
 // Generator is an implementation of the Templator interface
@@ -19,10 +19,10 @@ func (g *Generator) Name() string {
 
 // Write the templates to the specified output directory
 func (g *Generator) Write(application models.Application, outDir string) {
-	glog.Infof("Generating %s to directory: %s\n", application.Name, outDir)
+	zap.S().Infof("Generating %s to directory: %s\n", application.Name, outDir)
 
 	//jsonString, _ := utils.PrettyJSON(application)
-	//glog.Infof("Application: %s\n", jsonString)
+	//zap.S().Infof("Application: %v\n", jsonString)
 
 	WriteHelmBase(application, outDir)
 	WriteReadmeMd(application, outDir)

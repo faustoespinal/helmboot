@@ -6,7 +6,7 @@ import (
 	"helmboot/utils"
 	"path/filepath"
 
-	"github.com/golang/glog"
+	"go.uber.org/zap"
 )
 
 const testingStub = `
@@ -33,7 +33,7 @@ type TestInfo struct {
 
 // WriteSvcTests outputs a test for a given service
 func WriteSvcTests(metaApp models.MetaApplication, outDir string) {
-	glog.Infof("Writing helm-svc testing")
+	zap.S().Infof("Writing helm-svc testing")
 
 	for _, svc := range metaApp.Application.Spec.Services {
 		for svcKey := range svc {
