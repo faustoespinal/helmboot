@@ -15,7 +15,11 @@ notifications:
     on_success: always # default: always
     on_failure: always # default: always
 
-script: go test -v ./...
+script: 
+  - go test -race -coverprofile=coverage.txt -covermode=atomic -v ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 before_deploy:
   - cp ${GOPATH}/bin/helmboot* .; tar cvzf helmboot_${TRAVIS_OS_NAME}.tar.gz ./helmboot*
