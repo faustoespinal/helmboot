@@ -24,14 +24,13 @@ before_script:
     if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
       sudo apt update -y
       sudo apt install -y yum-utils
-      yum install conntrack -y
+      sudo yum install conntrack -y
       curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
       chmod +x kubectl
       sudo mv kubectl /usr/local/bin/
       curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
       chmod 700 get_helm.sh
       sudo ./get_helm.sh
-      helm repo add stable https://charts.helm.sh/stable
       helm repo add bitnami https://charts.bitnami.com/bitnami
       curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
       chmod +x minikube
