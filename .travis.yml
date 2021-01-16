@@ -19,8 +19,8 @@ env:
   - CHANGE_MINIKUBE_NONE_USER=true
 
 before_script:
+  - echo "OS = ${TRAVIS_OS_NAME}"
   - |
-    echo "OS = ${TRAVIS_OS_NAME}"
     if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
       sudo apt update -y
       sudo apt install -y yum-utils
