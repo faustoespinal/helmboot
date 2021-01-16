@@ -37,7 +37,7 @@ before_script:
       sudo minikube start --vm-driver=none --kubernetes-version=v1.19.0
       minikube update-context
       sleep 5
-      kubectl create ns testing
+      kubectl create ns emojivoto
       kubectl get ns
       kubectl get nodes
       sleep 5
@@ -46,7 +46,16 @@ before_script:
 
 script: 
   - go test -race -coverprofile=coverage.txt -covermode=atomic -v ./...
-  - helmboot
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+      mkdir charts
+      helmboot create --workload ./sample-apps/emojivoto-app.yaml --output ./charts/
+      cd ./charts/
+      helm install my-emojivoto --namespace emojivoto ./emojivoto/
+      sleep 15
+      kubectl -n emojivoto get all
+      helm -n emojivoto list
+    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
