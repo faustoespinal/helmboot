@@ -57,7 +57,7 @@ func TestCreate(t *testing.T) {
 	}
 	t.Logf("OutputDir: %v\n", dir)
 
-	performCreate([]byte(simpleApp), dir)
+	performCreate([]byte(simpleApp), dir, true)
 	chartFilePath := path.Join(dir, "simple-app", "Chart.yaml")
 	t.Logf("Chart content: %s\n", chartFilePath)
 	assert.True(t, utils.FileExists(chartFilePath))
