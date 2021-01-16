@@ -49,7 +49,7 @@ script:
   - |
     if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
       mkdir charts
-      helmboot create --workload ./sample-apps/emojivoto-app.yaml --output ./charts/
+      helmboot create --edison=false --workload=./sample-apps/emojivoto-app.yaml --output=./charts/
       cd ./charts/
       helm install my-emojivoto --namespace emojivoto ./emojivoto/
       sleep 15

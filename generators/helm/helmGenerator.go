@@ -20,6 +20,7 @@ func (g *Generator) Name() string {
 // Write the templates to the specified output directory
 func (g *Generator) Write(application models.Application, outDir string) {
 	zap.S().Infof("Generating %s to directory: %s\n", application.Name, outDir)
+	isEdison := application.IsEdison
 
 	//jsonString, _ := utils.PrettyJSON(application)
 	//zap.S().Infof("Application: %v\n", jsonString)
@@ -30,7 +31,10 @@ func (g *Generator) Write(application models.Application, outDir string) {
 
 	metaApp := models.CreateMetaApplication(application)
 	templateDir := filepath.Join(outDir, "templates")
-	WriteApplicationRegistration(application, templateDir)
+
+	if isEdison {
+		WriteApplicationRegistration(application, templateDir)
+	}
 
 	if len(application.Spec.Services) > 0 {
 		WriteServices(metaApp, templateDir)
@@ -57,7 +61,6 @@ func (g *Generator) Write(application models.Application, outDir string) {
 		WritePvcs(metaApp, templateDir)
 	}
 
-	isEdison := true
 	if isEdison {
 		if len(application.Spec.Messaging) > 0 {
 			edison.WriteEra(metaApp, templateDir)

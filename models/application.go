@@ -10,6 +10,7 @@ type Application struct {
 	Description string `yaml:"description,omitempty"`
 	Version     string `yaml:"version"`
 	AppVersion  string `yaml:"appVersion,omitempty"`
+	IsEdison    bool
 	Spec        struct {
 		Security struct {
 			GrantTypes []string             `yaml:"grantTypes"`

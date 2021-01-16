@@ -7,7 +7,7 @@ import (
 )
 
 // IngressTemplate defines a template of a kubernetes service
-const IngressTemplate = `
+const ingressTemplate1 = `
 {{- $outer := . }}
 {{- if .Application.Spec.Ingresses }}
 {{- range .Application.Spec.Ingresses }}
@@ -30,6 +30,8 @@ spec:
               name: {{ $value.Service }}
               port:
                 number: {{"{{"}} .Values.service.{{ snakecase $value.Service }}.port {{"}}"}}
+`
+const ingressTemplate2 = `
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongIngress
@@ -40,6 +42,9 @@ proxy:
 route:
   strip_path: true
   preserve_host: false
+`
+
+const ingressTemplate3 = `
 {{- if $value.Namespace }}
 ---
 apiVersion: v1
@@ -57,5 +62,12 @@ spec:
 
 // WriteIngresses outputs the ingress templates for these charts
 func WriteIngresses(metaApp models.MetaApplication, outDir string) {
-	utils.OutputTemplate(metaApp, IngressTemplate, filepath.Join(outDir, "ingress.yaml"))
+	isEdison := metaApp.Application.IsEdison
+	ingressTemplate := ingressTemplate1
+	if isEdison {
+		ingressTemplate = ingressTemplate + ingressTemplate2 + ingressTemplate3
+	} else {
+		ingressTemplate = ingressTemplate + ingressTemplate3
+	}
+	utils.OutputTemplate(metaApp, ingressTemplate, filepath.Join(outDir, "ingress.yaml"))
 }
