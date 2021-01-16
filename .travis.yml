@@ -22,9 +22,8 @@ before_script:
   - echo "OS = ${TRAVIS_OS_NAME}"
   - |
     if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-      sudo apt update -y
-      sudo apt install -y yum-utils
-      sudo yum install conntrack -y
+      sudo apt-get update -y
+      sudo apt-get install -y conntrack
       curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
       chmod +x kubectl
       sudo mv kubectl /usr/local/bin/
