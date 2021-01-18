@@ -52,7 +52,7 @@ script:
       helmboot create --edison=false --workload=./sample-apps/emojivoto-app.yaml --output=./charts/
       cd ./charts/
       helm install my-emojivoto --namespace emojivoto ./emojivoto/
-      sleep 15
+      sleep 30
       kubectl -n emojivoto get all
       helm -n emojivoto list
     fi
