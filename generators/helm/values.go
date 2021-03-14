@@ -129,6 +129,56 @@ service:
   {{- end}}
   {{- end}}
 
+secrets:
+  {{- if .Spec.Secrets}}
+  {{- range .Spec.Secrets}}
+  {{- range $key, $value := . }}
+  ## {{ snakecase $key }} service definition
+  {{ snakecase $key }}:
+    {{- range $value.Data}}
+    {{ . }} : "a_secret"
+    {{- end}}
+  {{- end}}
+  {{- end}}
+  {{- end}}
+
+storage:
+  {{- if .Spec.Storage}}
+  {{- range .Spec.Storage}}
+  {{- range $key, $value := . }}
+  ## {{ snakecase $key }} storage definition
+  {{ snakecase $key }}:
+    size: {{ $value.Size }}
+    mode: {{ $value.Mode }}
+    {{- if $value.StorageClass}}
+    storageClass: {{ $value.StorageClass }}
+    {{- end}}
+  {{- end}}
+  {{- end}}
+  {{- end}}
+
+epa:
+  {{- if .Spec.Databases}}
+  {{- range .Spec.Databases}}
+  {{ regexReplaceAll "\\W+" . "_" }}:
+    postgres:
+      dbname: {{ regexReplaceAll "\\W+" . "_" }}
+      username: {{ regexReplaceAll "\\W+" . "_" }}user
+      targetname: eis-common-postgres
+  {{- end}}
+  {{- end}}
+
+era:
+  {{- if .Spec.Messaging}}
+  {{- range .Spec.Messaging}}
+  {{ regexReplaceAll "\\W+" . "_" }}:
+    amqp:
+      vhostname: /
+      username: {{ regexReplaceAll "\\W+" . "_" }}user
+  {{- end}}
+  {{- end}}
+
+
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##

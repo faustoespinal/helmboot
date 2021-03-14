@@ -21,11 +21,8 @@ metadata:
 spec:
   clientid: {{ $outer.Application.Name }}
   clientns: {{ $outer.Meta.Namespace }}
-  password: {{"{{"}} .Values.era.password.{{ . }} | b64enc {{"}}"}}
-  servicehost: {{"{{"}} .Values.amqp.hostname {{"}}"}}
-  serviceport: {{"{{"}} .Values.amqp.port {{"}}"}}
-  username: {{ . }}user
-  vhostname: /
+  username: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.username {{"}}"}}
+  vhostname: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.vhostname {{"}}"}}
 {{- end }}
 {{- end }}
 `

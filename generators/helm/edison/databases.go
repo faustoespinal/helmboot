@@ -23,12 +23,9 @@ metadata:
 spec:
   clientid: {{ $outer.Application.Name }}
   clientns: {{ $outer.Meta.Namespace }}
-  dbname: {{ . }}library
-  hostname: {{"{{"}} .Values.postgres.hostname {{"}}"}}
-  password: {{"{{"}} .Values.epa.password.{{ . }} | b64enc {{"}}"}}
-  port: {{"{{"}} .Values.postgres.port {{"}}"}}
-  targetname: {{"{{"}} .Values.postgres.targetname {{"}}"}}
-  username: {{ . }}library
+  dbname: {{"{{"}} .Values.epa.{{ regexReplaceAll "\\W+" . "_" }}.postgres.dbname {{"}}"}}
+  targetname: {{"{{"}} .Values.epa.{{ regexReplaceAll "\\W+" . "_" }}.postgres.targetname {{"}}"}}
+  username: {{"{{"}} .Values.epa.{{ regexReplaceAll "\\W+" . "_" }}.postgres.username {{"}}"}}
 {{- end }}
 {{- end }}
 `

@@ -14,7 +14,7 @@ func CreateMetaApplication(app Application) MetaApplication {
 	var metaApp = MetaApplication{}
 
 	metaApp.Meta.ReleaseName = "{{ .ReleaseName }}"
-	metaApp.Meta.Namespace = "{{ Release.Namespace }}"
+	metaApp.Meta.Namespace = "{{ .Release.Namespace }}"
 	metaApp.Application = app
 	return metaApp
 }

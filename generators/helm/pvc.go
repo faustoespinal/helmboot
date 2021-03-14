@@ -25,7 +25,7 @@ spec:
   {{- end }}
   resources:
     requests:
-      storage: {{"{{"}} .Values.{{ $key }}.size {{"}}"}}
+      storage: {{"{{"}} .Values.storage.{{ $key }}.size {{"}}"}}
 {{- end}}
 {{- end}}
 {{- end}}

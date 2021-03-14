@@ -19,8 +19,8 @@ spec:
     args: ['http://svc-1:80']
   deployments:
     - deadbeef:
-        image: someimage
-        tag: 1.0.0
+        image: kennethreitz/httpbin
+        tag: latest
         configmaps:
           - appconfig
           - otherconfig
@@ -43,8 +43,8 @@ spec:
             memory: "128Mi"
             cpu: "500m"
     - crazycow:
-        image: otherimage
-        tag: 2.0.1
+        image: kennethreitz/httpbin
+        tag: latest
         secret: appsecret1
         ports: 
           - containerPort: 8082
@@ -61,8 +61,8 @@ spec:
               mount: "/mnt/store2"
   jobs:
     - initmeplease:
-        image: somejobimage
-        tag: 1.0.1
+        image: curlimages/curl
+        tag: latest
         command: "echo Initializing; ls -ls"
         configmaps:
           - appconfig
