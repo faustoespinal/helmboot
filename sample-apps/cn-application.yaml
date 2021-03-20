@@ -71,9 +71,6 @@ spec:
             value: "Hello there again"
         databases:
           - my-db-connection
-        storage:
-          - mystorage2:
-              mount: "/mnt/storage"
   services:
     - svc1:
         deployment: deadbeef
@@ -85,20 +82,16 @@ spec:
         mode: ReadWriteOnce
     - mystorage2:
         size: 1Gi
-        mode: ReadWriteMany
-        storageClass: rook-ceph-block
+        mode: ReadWriteOnce
   ingresses:
     - svc1-ingress:
         service: svc1
     - svc2-ingress:
         service: svc2
     - svc3-ingress:
-        service: svc2
-    # - svc3-ingress:
-    #     service: svc3
-    #     namespace: edison-core
-    #     externalService: eis-stow
-    #     port: 30078
+        service: svc3
+        namespace: edison-core
+        externalService: eis-stow
   configmaps:
     - appconfig:
         data:

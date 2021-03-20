@@ -28,8 +28,13 @@ spec:
           backend:
             service:
               name: {{ $value.Service }}
+              {{- if not $value.Namespace }}
               port:
                 number: {{"{{"}} .Values.service.{{ snakecase $value.Service }}.port {{"}}"}}
+              {{- else }}
+              port:
+                number: 80
+              {{- end }}
 `
 const ingressTemplate2 = `
 ---
