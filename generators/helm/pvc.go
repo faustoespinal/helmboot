@@ -19,7 +19,7 @@ metadata:
   name: {{ $key }}
 spec:
   accessModes:
-	- {{ $value.Mode }}
+    - {{ $value.Mode }}
   {{- if $value.StorageClass }}
   storageClassName: {{ $value.StorageClass }}
   {{- end }}

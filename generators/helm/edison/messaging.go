@@ -15,14 +15,14 @@ const EraTemplate = `
 apiVersion: ees.ge.com/v1
 kind: EesRabbitmqAccount
 metadata:
-  annotations:
-    resource/author: {{ $outer.Application.Name }}
-  name: {{ . }}
+  annotations:
+    resource/author: {{ $outer.Application.Name }}
+  name: {{ . }}
 spec:
-  clientid: {{ $outer.Application.Name }}
-  clientns: {{ $outer.Meta.Namespace }}
-  username: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.username {{"}}"}}
-  vhostname: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.vhostname {{"}}"}}
+  clientid: {{ $outer.Application.Name }}
+  clientns: {{ $outer.Meta.Namespace }}
+  username: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.username {{"}}"}}
+  vhostname: {{"{{"}} .Values.era.{{ regexReplaceAll "\\W+" . "_" }}.amqp.vhostname {{"}}"}}
 {{- end }}
 {{- end }}
 `

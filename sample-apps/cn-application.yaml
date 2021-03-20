@@ -37,11 +37,11 @@ spec:
           - my-db-connection
         resources:
           requests:
-            memory: "64Mi"
-            cpu: "250m"
+            memory: 64Mi
+            cpu: 250m
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: 128Mi
+            cpu: 500m
     - crazycow:
         image: kennethreitz/httpbin
         tag: latest
@@ -86,16 +86,19 @@ spec:
     - mystorage2:
         size: 1Gi
         mode: ReadWriteMany
-        storageClass: shared
+        storageClass: rook-ceph-block
   ingresses:
     - svc1-ingress:
         service: svc1
     - svc2-ingress:
         service: svc2
     - svc3-ingress:
-        service: svc3
-        namespace: edison-core
-        externalService: eis-stow
+        service: svc2
+    # - svc3-ingress:
+    #     service: svc3
+    #     namespace: edison-core
+    #     externalService: eis-stow
+    #     port: 30078
   configmaps:
     - appconfig:
         data:

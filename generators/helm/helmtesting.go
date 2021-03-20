@@ -18,7 +18,7 @@ metadata:
     app.kubernetes.io/name: test-{{ .TargetService }}
 spec:
   containers:
-	- name: helm-test
+    - name: helm-test
       image: {{ .Application.Spec.Testing.Image }}
       command: {{ .Application.Spec.Testing.Command }}
       args:  [ "http://{{ .TargetService }}:80" ]

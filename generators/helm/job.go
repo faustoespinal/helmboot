@@ -144,7 +144,9 @@ spec:
         {{- end }}
         securityContext:
           runAsUser: 1000
-        resources: {{"{{"}} .Values.{{ $key }}.resources {{"}}"}}
+        {{"{{"}} if .Values.{{ $key }}.resources {{"}}"}}
+        resources: {{"{{"}}- toYaml .Values.{{ $key}}.resources | nindent 8 {{"}}"}}
+        {{"{{"}} end {{"}}"}}
 		{{- if $value.Storage }}
         volumeMounts:
 		{{- range $value.Storage }}
