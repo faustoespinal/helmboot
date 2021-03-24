@@ -23,7 +23,7 @@ metadata:
     sourceversion: {{ $outer.Application.Version }}
     sourceappversion: {{ $outer.Application.AppVersion }}
 spec:
-  backoffLimit: {{"{{"}} .Values.{{ $key }}.backoffLimit {{"}}"}}
+  backoffLimit: {{"{{"}} .Values.{{ snakecase $key }}.backoffLimit {{"}}"}}
   template:
     metadata:
       labels:
@@ -35,7 +35,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ $key }}
-        image: {{"{{"}} .Values.{{ $key }}.image.repository {{"}}"}}:{{"{{"}} .Values.{{ $key }}.image.tag {{"}}"}}
+        image: {{"{{"}} .Values.{{ snakecase $key }}.image.repository {{"}}"}}:{{"{{"}} .Values.{{ snakecase $key }}.image.tag {{"}}"}}
         imagePullPolicy: {{"{{"}} .Values.pullPolicy {{"}}"}}
 		{{- if or ($value.Env) ($value.ConfigMaps) ($value.Secrets) ($value.Databases) }}
         env:
@@ -144,8 +144,8 @@ spec:
         {{- end }}
         securityContext:
           runAsUser: 1000
-        {{"{{"}} if .Values.{{ $key }}.resources {{"}}"}}
-        resources: {{"{{"}}- toYaml .Values.{{ $key}}.resources | nindent 8 {{"}}"}}
+        {{"{{"}} if .Values.{{ snakecase $key }}.resources {{"}}"}}
+        resources: {{"{{"}}- toYaml .Values.{{ snakecase $key }}.resources | nindent 8 {{"}}"}}
         {{"{{"}} end {{"}}"}}
 		{{- if $value.Storage }}
         volumeMounts:

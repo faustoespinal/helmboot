@@ -1,0 +1,33 @@
+apiVersion: helmboot/beta/v1
+type: job  
+name: setup-rds-postgres
+description: "Runs a job to setup a RDS-Postgres instance"
+version: 1.0.0
+appVersion: 1.0.0
+spec:
+  jobs:
+    - create-rds-postgres:
+        image: python
+        tag: 3
+        command: "echo Initializing; ls -ls"
+        configmaps:
+          - aws-config
+        secrets:
+          - aws-secrets
+        env:
+          - name: INIT_THE_MESSAGE
+            value: "Hello there again"
+  storage:
+    - storage:
+        size: 4Gi
+        mode: ReadWriteOnce
+  configmaps:
+    - aws-config:
+        data:
+          - mykey: myvalue
+  secrets:
+    - aws-secrets:
+        type: "opaque"  # tls, opaque, file
+        data:
+          - SECRET_A
+          - SECRET_B

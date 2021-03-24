@@ -31,7 +31,7 @@ registry: docker.io
 {{- if .Spec.Deployments}}
 {{- range .Spec.Deployments}}
 {{- range $key, $value := . }}
-{{ $key }}:
+{{ snakecase $key }}:
   image:
     repository: {{ $value.Image }}
     tag: {{ $value.Tag }}
@@ -73,12 +73,14 @@ registry: docker.io
 {{- if .Spec.Jobs}}
 {{- range .Spec.Jobs}}
 {{- range $key, $value := . }}
-{{ $key }}:
+{{ snakecase $key }}:
   image:
     repository: {{ $value.Image }}
     tag: {{ $value.Tag }}
 ` + workloadTmpl +
 	`
+  backoffLimit: 1
+
   ## {{ $key }} pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##  
@@ -112,13 +114,14 @@ registry: docker.io
 {{- end}}
 {{- end}}
 {{- end}}
+
 ## Specify a imagePullPolicy
 ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 pullPolicy: IfNotPresent
+{{- if .Spec.Services}}
 service:
-  {{- if .Spec.Services}}
   {{- range .Spec.Services}}
   {{- range $key, $value := . }}
   ## {{ snakecase $key }} service definition
@@ -127,7 +130,7 @@ service:
     port: 8080
   {{- end}}
   {{- end}}
-  {{- end}}
+{{- end}}
 
 secrets:
   {{- if .Spec.Secrets}}
@@ -157,8 +160,8 @@ storage:
   {{- end}}
   {{- end}}
 
+{{- if .Spec.Databases}}
 epa:
-  {{- if .Spec.Databases}}
   {{- range .Spec.Databases}}
   {{ regexReplaceAll "\\W+" . "_" }}:
     postgres:
@@ -166,18 +169,17 @@ epa:
       username: {{ regexReplaceAll "\\W+" . "_" }}user
       targetname: eis-common-postgres
   {{- end}}
-  {{- end}}
+{{- end}}
 
+{{- if .Spec.Messaging}}
 era:
-  {{- if .Spec.Messaging}}
   {{- range .Spec.Messaging}}
   {{ regexReplaceAll "\\W+" . "_" }}:
     amqp:
       vhostname: /
       username: {{ regexReplaceAll "\\W+" . "_" }}user
   {{- end}}
-  {{- end}}
-
+{{- end}}
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/

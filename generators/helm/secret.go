@@ -19,7 +19,7 @@ metadata:
   name: {{ $key }}
 data:
   {{- range $value.Data }}
-  {{ . }}: {{"{{"}} .Values.secrets.{{ $key }}.{{ . }} | b64enc {{"}}"}}
+  {{ . }}: {{"{{"}} .Values.secrets.{{snakecase $key }}.{{ . }} | b64enc {{"}}"}}
   {{- end }}
 {{- end }}
 {{- end }}
