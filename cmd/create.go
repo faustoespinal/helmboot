@@ -23,6 +23,7 @@ import (
 	"os"
 	"path/filepath"
 
+	gyaml "github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
@@ -38,6 +39,22 @@ func performCreate(yamlFile []byte, outDir string, isEdison bool) {
 		zap.S().Errorf("Error parsing file: %v", err)
 		panic(err)
 	}
+	json_doc, err := gyaml.YAMLToJSON(yamlFile)
+	if err != nil {
+		zap.S().Errorf("Error converting YAML to JSON: %v", err)
+		panic(err)
+	}
+
+	key_errors := models.ValidateJson(json_doc)
+	if key_errors != nil {
+		zap.S().Errorf("Parsing errors\n")
+		zap.S().Errorf("--------------\n")
+		for idx, parse_err := range key_errors {
+			zap.S().Errorf("%v: %v", idx, parse_err.Message)
+		}
+		os.Exit(1)
+	}
+
 	application.IsEdison = isEdison
 
 	workloadDir := filepath.Join(outDir, application.Name)
