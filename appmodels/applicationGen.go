@@ -70,8 +70,8 @@ spec:
       service: {{ .Name }}-svc
     - {{ .Name }}-ext-ingress:
       service: {{ .Name }}-ext-svc
-      namespace: edison-core
-      externalService: eis-stow
+      namespace: dicom
+      externalService: dcm-stow
   configmaps:
     - app-config:
       data:
@@ -218,8 +218,8 @@ spec:
         service: svc1
     - svc3-ingress:
         service: svc3
-        namespace: edison-core
-        externalService: eis-stow
+        namespace: dicom
+        externalService: dcm-stow
   configmaps:
     - appconfig:
         data:

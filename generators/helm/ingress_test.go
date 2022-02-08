@@ -33,8 +33,8 @@ spec:
       service: svc2
   - svc3-ingress:
       service: svc3
-      namespace: edison-core
-      externalService: eis-stow
+      namespace: dicom
+      externalService: dcm-stow
 `
 
 func TestWriteIngresses(t *testing.T) {
