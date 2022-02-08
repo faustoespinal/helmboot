@@ -10,7 +10,6 @@ type Application struct {
 	Description string `yaml:"description,omitempty"`
 	Version     string `yaml:"version"`
 	AppVersion  string `yaml:"appVersion,omitempty"`
-	IsEdison    bool
 	Spec        struct {
 		Security struct {
 			GrantTypes []string             `yaml:"grantTypes"`
@@ -33,31 +32,4 @@ type Application struct {
 			Args    []string `yaml:"args,omitempty"`
 		} `yaml:"testing,omitempty"`
 	} `yaml:"spec"`
-}
-
-// AppRole describes an application specific role
-type AppRole struct {
-	Scopes []string `yaml:"scopes"`
-}
-
-// AppService is a descriptor for an application service
-type AppService struct {
-	Deployment string `yaml:"deployment"`
-}
-
-// AppIngress describes an ingress
-type AppIngress struct {
-	Service         string `yaml:"service"`
-	Namespace       string `yaml:"namespace,omitempty"`
-	ExternalService string `yaml:"externalService,omitempty"`
-}
-
-// AppConfigMap defines alternate ways of encoding configuration data in a file and/or key/value pairs
-type AppConfigMap struct {
-	Data []map[string]string `yaml:"data,omitempty"`
-}
-
-// StorageMount describes the way to mount a unit of storage
-type StorageMount struct {
-	Mount string `yaml:"mount,omitempty"`
 }

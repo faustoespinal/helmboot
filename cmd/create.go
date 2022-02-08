@@ -29,7 +29,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func performCreate(yamlFile []byte, outDir string, isEdison bool) {
+func performCreate(yamlFile []byte, outDir string) {
 	utils.CreateDir(outDir)
 
 	var application models.Application
@@ -54,8 +54,6 @@ func performCreate(yamlFile []byte, outDir string, isEdison bool) {
 		}
 		os.Exit(1)
 	}
-
-	application.IsEdison = isEdison
 
 	workloadDir := filepath.Join(outDir, application.Name)
 	utils.CreateDir(workloadDir)
@@ -93,13 +91,7 @@ var createCmd = &cobra.Command{
 			panic(err)
 		}
 
-		isEdison, err := cmd.Flags().GetBool("edison")
-		if err != nil {
-			cmd.Help()
-			os.Exit(1)
-		}
-		zap.S().Infow("Edison app: ", "isEdison", isEdison)
-		performCreate(yamlFile, outDir, isEdison)
+		performCreate(yamlFile, outDir)
 	},
 }
 
@@ -113,7 +105,6 @@ func init() {
 	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 	createCmd.PersistentFlags().String("workload", "", "File name for the input application template")
 	createCmd.PersistentFlags().String("output", "", "Directory name where to create the workload deployment (e.g. Helm)")
-	createCmd.PersistentFlags().Bool("edison", false, "Generate chart using a GE Healthcare Edison profile")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

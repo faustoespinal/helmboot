@@ -36,20 +36,8 @@ spec:
                 number: 80
               {{- end }}
 `
-const ingressTemplate2 = `
----
-apiVersion: configuration.konghq.com/v1
-kind: KongIngress
-metadata:
-  name: {{ $key }}-kong
-proxy:
-  path: /{{ $outer.Application.Name }}/{{ $value.Service }}
-route:
-  strip_path: true
-  preserve_host: false
-`
 
-const ingressTemplate3 = `
+const ingressTemplateTail = `
 {{- if $value.Namespace }}
 ---
 apiVersion: v1
@@ -67,12 +55,8 @@ spec:
 
 // WriteIngresses outputs the ingress templates for these charts
 func WriteIngresses(metaApp models.MetaApplication, outDir string) {
-	isEdison := metaApp.Application.IsEdison
 	ingressTemplate := ingressTemplate1
-	if isEdison {
-		ingressTemplate = ingressTemplate + ingressTemplate2 + ingressTemplate3
-	} else {
-		ingressTemplate = ingressTemplate + ingressTemplate3
-	}
+
+	ingressTemplate = ingressTemplate + ingressTemplateTail
 	utils.OutputTemplate(metaApp, ingressTemplate, filepath.Join(outDir, "ingress.yaml"))
 }
